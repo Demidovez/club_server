@@ -1,8 +1,10 @@
 import axios from "axios";
 import express from "express";
 import mongoose from "mongoose";
+import { CategoryModel } from "./mongo/models/Category";
 import { MaterialModel } from "./mongo/models/Material";
-import { IMaterial } from "./types/types";
+import { UserModel } from "./mongo/models/User";
+import { CommentModel } from "./mongo/models/Comment";
 
 const app = express();
 const port = process.env.PORT;
@@ -15,6 +17,24 @@ app.get("/get_materials", async (req, res) => {
   const materials = await MaterialModel.find();
 
   res.send(materials);
+});
+
+app.get("/get_users", async (req, res) => {
+  const users = await UserModel.find();
+
+  res.send(users);
+});
+
+app.get("/get_categories", async (req, res) => {
+  const categories = await CategoryModel.find();
+
+  res.send(categories);
+});
+
+app.get("/get_comments", async (req, res) => {
+  const comments = await CommentModel.find();
+
+  res.send(comments);
 });
 
 app.listen(port, () =>
