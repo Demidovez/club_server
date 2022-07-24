@@ -19,10 +19,31 @@ app.get("/get_materials", async (req, res) => {
   res.send(materials);
 });
 
+app.get("/get_materials/:category_id", async (req, res) => {
+  const categoryId = req.params.category_id;
+
+  const materials = await MaterialModel.find(
+    {
+      categories: { $in: categoryId },
+    },
+    { categories: 0 }
+  );
+
+  res.send(materials);
+});
+
 app.get("/get_users", async (req, res) => {
   const users = await UserModel.find();
 
   res.send(users);
+});
+
+app.get("/get_user/:email", async (req, res) => {
+  const email = req.params.email;
+
+  const user = await UserModel.findOne({ email: email });
+
+  res.send(user);
 });
 
 app.get("/get_categories", async (req, res) => {

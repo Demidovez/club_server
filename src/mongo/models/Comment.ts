@@ -12,4 +12,11 @@ export const CommentSchema = new Schema<IComment>(
   { timestamps: true }
 );
 
+CommentSchema.set("toJSON", {
+  virtuals: true,
+  transform: (_, ret) => {
+    delete ret._id;
+  },
+});
+
 export const CommentModel = mongoose.model("Comment", CommentSchema);

@@ -1,6 +1,6 @@
-import { Schema } from "mongoose";
 import { IUser } from "../../types/types";
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+const ObjectId = Schema.Types.ObjectId;
 
 export const UserSchema = new Schema<IUser>({
   first_name: { type: String, required: true },
@@ -11,6 +11,13 @@ export const UserSchema = new Schema<IUser>({
   email: { type: String, required: true },
   avatar_color: { type: String, required: true },
   avatar: String,
+});
+
+UserSchema.set("toJSON", {
+  virtuals: true,
+  transform: (_, ret) => {
+    delete ret._id;
+  },
 });
 
 export const UserModel = mongoose.model("User", UserSchema);

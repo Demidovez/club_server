@@ -10,6 +10,7 @@ export interface IMaterial {
   author_id: Types.ObjectId;
   isActive: boolean;
   categories: Types.ObjectId[];
+  likes: Types.ObjectId[];
 }
 
 export const ROLE = {
@@ -27,7 +28,7 @@ export interface IUser {
   phone: string;
   email: string;
   avatar_color: string;
-  avatar?: string;
+  avatar: string;
 }
 
 export interface ICategory {

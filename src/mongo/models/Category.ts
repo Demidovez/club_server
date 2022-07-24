@@ -9,4 +9,11 @@ export const CategorySchema = new Schema<ICategory>({
   color: { type: String, required: true },
 });
 
+CategorySchema.set("toJSON", {
+  virtuals: true,
+  transform: (_, ret) => {
+    delete ret._id;
+  },
+});
+
 export const CategoryModel = mongoose.model("Category", CategorySchema);
