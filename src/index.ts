@@ -5,7 +5,9 @@ import { CategoryModel } from "./mongo/models/Category";
 import { MaterialModel } from "./mongo/models/Material";
 import { UserModel } from "./mongo/models/User";
 import { CommentModel } from "./mongo/models/Comment";
+import { IMaterial } from "./types/types";
 
+const ObjectId = mongoose.Types.ObjectId;
 const app = express();
 const port = process.env.PORT;
 
@@ -22,14 +24,40 @@ app.get("/get_materials", async (req, res) => {
 app.get("/get_materials/:category_id", async (req, res) => {
   const categoryId = req.params.category_id;
 
-  const materials = await MaterialModel.find(
+  const materials = await MaterialModel.aggregate<IMaterial>([
     {
-      categories: { $in: categoryId },
+      $match: { categories_ids: new ObjectId(categoryId) },
     },
-    { categories: 0 }
-  );
+    {
+      $addFields: {
+        id: "$_id",
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "material_id",
+        as: "comments_ids",
+      },
+    },
+    {
+      $project: {
+        categories_ids: 0,
+        _id: 0,
+      },
+    },
+  ]);
 
-  res.send(materials);
+  res.send(
+    materials.map((material) => ({
+      ...material,
+      image: material.image
+        ? `${process.env.BASE_IMAGE_URL}${material.image}`
+        : "",
+      comments_ids: material.comments_ids.map((comment) => comment._id),
+    }))
+  );
 });
 
 app.get("/get_users", async (req, res) => {

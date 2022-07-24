@@ -9,8 +9,9 @@ export const MaterialSchema = new Schema<IMaterial>(
     desc: String,
     author_id: ObjectId,
     isActive: Boolean,
-    categories: [ObjectId],
-    likes: [ObjectId],
+    image: String,
+    categories_ids: [ObjectId],
+    users_liked_ids: [ObjectId],
   },
   { timestamps: true }
 );

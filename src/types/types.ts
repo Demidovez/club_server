@@ -9,8 +9,10 @@ export interface IMaterial {
   desc: string;
   author_id: Types.ObjectId;
   isActive: boolean;
-  categories: Types.ObjectId[];
-  likes: Types.ObjectId[];
+  image: string;
+  categories_ids: Types.ObjectId[];
+  users_liked_ids: Types.ObjectId[];
+  comments_ids: Types.ObjectId[];
 }
 
 export const ROLE = {
