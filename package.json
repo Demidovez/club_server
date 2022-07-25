@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "ts-node -r dotenv/config ./src/index.ts",
     "dev": "npx nodemon -x 'ts-node -r dotenv/config src/index.ts dotenv_config_path=.env_dev || (sleep 5; touch src/index.ts)'"
   },
   "author": "",

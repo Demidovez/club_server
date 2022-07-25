@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  club_server:
+    build: .
+    restart: unless-stopped
+    image: club_server
+    container_name: club_server_co
+    ports:
+      - "8010:8010"
