@@ -11,6 +11,13 @@ const ObjectId = mongoose.Types.ObjectId;
 const app = express();
 const port = process.env.PORT;
 
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
 // Подключение к БД
 mongoose.connect(process.env.MONGO_URL as string);
 mongoose.Promise = global.Promise;
