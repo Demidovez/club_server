@@ -4,9 +4,11 @@ import mongoose from "mongoose";
 const ObjectId = Schema.Types.ObjectId;
 
 export const CategorySchema = new Schema<ICategory>({
+  name: { type: String, required: true },
   title: { type: String, required: true },
   icon: { type: String, required: true },
   color: { type: String, required: true },
+  desc: { type: String, required: false },
 });
 
 CategorySchema.set("toJSON", {

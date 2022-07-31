@@ -5,7 +5,7 @@ import { CategoryModel } from "./mongo/models/Category";
 import { MaterialModel } from "./mongo/models/Material";
 import { UserModel } from "./mongo/models/User";
 import { CommentModel } from "./mongo/models/Comment";
-import { IMaterial } from "./types/types";
+import { IMaterial, IMaterialsData } from "./types/types";
 
 const ObjectId = mongoose.Types.ObjectId;
 const app = express();
@@ -65,6 +65,64 @@ app.get("/get_materials/:category_id", async (req, res) => {
       comments_ids: material.comments_ids.map((comment) => comment._id),
     }))
   );
+});
+
+app.get("/get_materials_by_category_name/:category_name", async (req, res) => {
+  const categoryName = req.params.category_name;
+
+  const materials = await MaterialModel.aggregate<IMaterial>([
+    {
+      $lookup: {
+        from: "categories",
+        let: { categories_ids: "$categories_ids" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ["$_id", "$$categories_ids"] },
+                  { $eq: ["$name", categoryName] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "category",
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "material_id",
+        as: "comments_ids",
+      },
+    },
+    {
+      $unwind: "$category",
+    },
+    {
+      $addFields: {
+        id: "$_id",
+        category_title: "$category.title",
+        comments_ids: "$comments_ids._id",
+      },
+    },
+    {
+      $project: {
+        categories_ids: 0,
+        category: 0,
+        _id: 0,
+      },
+    },
+  ]);
+
+  const result: IMaterialsData = {
+    category: (materials.length && materials[0].category_title) || "",
+    data: materials,
+  };
+
+  res.send(result);
 });
 
 app.get("/get_users", async (req, res) => {

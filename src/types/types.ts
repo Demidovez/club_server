@@ -11,6 +11,7 @@ export interface IMaterial {
   isActive: boolean;
   image: string;
   categories_ids: Types.ObjectId[];
+  category_title: string;
   users_liked_ids: Types.ObjectId[];
   comments_ids: Types.ObjectId[];
 }
@@ -35,9 +36,11 @@ export interface IUser {
 
 export interface ICategory {
   id: Types.ObjectId;
+  name: string;
   title: string;
   icon: string;
   color: string;
+  desc: string;
 }
 
 export interface IComment {
@@ -46,4 +49,9 @@ export interface IComment {
   createdAt: Date;
   text: string;
   user: Types.ObjectId;
+}
+
+export interface IMaterialsData {
+  category: string;
+  data: IMaterial[];
 }
