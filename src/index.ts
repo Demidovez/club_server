@@ -119,7 +119,12 @@ app.get("/get_materials_by_category_name/:category_name", async (req, res) => {
 
   const result: IMaterialsData = {
     category: (materials.length && materials[0].category_title) || "",
-    data: materials,
+    data: materials.map((material) => ({
+      ...material,
+      image: material.image
+        ? `${process.env.BASE_IMAGE_URL}${material.image}`
+        : "",
+    })),
   };
 
   res.send(result);

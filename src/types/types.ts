@@ -3,8 +3,8 @@ import { Types } from "mongoose";
 export interface IMaterial {
   id: Types.ObjectId;
   title: string;
-  date_created: Date;
-  date_changed: Date;
+  createdAt: Date;
+  updatedAt: Date;
   data: Object;
   desc: string;
   author_id: Types.ObjectId;
