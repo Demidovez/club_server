@@ -5,6 +5,7 @@ const ObjectId = Schema.Types.ObjectId;
 export const MaterialSchema = new Schema<IMaterial>(
   {
     title: { type: String, required: true },
+    name: { type: String, required: true },
     data: Object,
     desc: String,
     author_id: ObjectId,

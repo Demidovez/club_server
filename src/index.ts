@@ -5,7 +5,7 @@ import { CategoryModel } from "./mongo/models/Category";
 import { MaterialModel } from "./mongo/models/Material";
 import { UserModel } from "./mongo/models/User";
 import { CommentModel } from "./mongo/models/Comment";
-import { IMaterial, IMaterialsData } from "./types/types";
+import { IMaterial, IMaterialsData, TMaterialCard } from "./types/types";
 
 const ObjectId = mongoose.Types.ObjectId;
 const app = express();
@@ -70,7 +70,7 @@ app.get("/get_materials/:category_id", async (req, res) => {
 app.get("/get_materials_by_category_name/:category_name", async (req, res) => {
   const categoryName = req.params.category_name;
 
-  const materials = await MaterialModel.aggregate<IMaterial>([
+  const materials = await MaterialModel.aggregate<TMaterialCard>([
     {
       $lookup: {
         from: "categories",
@@ -112,6 +112,8 @@ app.get("/get_materials_by_category_name/:category_name", async (req, res) => {
       $project: {
         categories_ids: 0,
         category: 0,
+        data: 0,
+        isActive: 0,
         _id: 0,
       },
     },
@@ -128,6 +130,16 @@ app.get("/get_materials_by_category_name/:category_name", async (req, res) => {
   };
 
   res.send(result);
+});
+
+app.get("/get_material_by_name/:material_name", async (req, res) => {
+  const materialName = req.params.material_name;
+
+  const material = await MaterialModel.findOne<TMaterialCard>({
+    name: materialName,
+  });
+
+  res.send(material);
 });
 
 app.get("/get_users", async (req, res) => {

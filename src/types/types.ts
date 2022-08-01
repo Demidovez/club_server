@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 export interface IMaterial {
   id: Types.ObjectId;
   title: string;
+  name: string;
   createdAt: Date;
   updatedAt: Date;
   data: Object;
@@ -15,6 +16,8 @@ export interface IMaterial {
   users_liked_ids: Types.ObjectId[];
   comments_ids: Types.ObjectId[];
 }
+
+export type TMaterialCard = Omit<IMaterial, "data" | "isActive">;
 
 export const ROLE = {
   admin: "admin",
@@ -53,5 +56,5 @@ export interface IComment {
 
 export interface IMaterialsData {
   category: string;
-  data: IMaterial[];
+  data: TMaterialCard[];
 }
